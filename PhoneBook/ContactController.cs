@@ -1,29 +1,42 @@
-﻿namespace PhoneBook;
+﻿using Spectre.Console;
+using System.Net.Http.Headers;
+
+namespace PhoneBook;
 
 internal class ContactController
 {
-    internal static void AddContact()
+    internal static void AddContact(Contact contact)
     {
-        throw new NotImplementedException();
+        using var db = new ContactContext();
+        db.Add(contact);
+        db.SaveChanges();
     }
 
-    internal static void DeleteContact()
+    internal static void DeleteContact(Contact contact)
     {
-        throw new NotImplementedException();
+        using var db = new ContactContext();
+        db.Remove(contact);
+        db.SaveChanges();
     }
 
-    internal static void GetContactById()
+    internal static Contact GetContactById(int id)
     {
-        throw new NotImplementedException();
+        using var db = new ContactContext();
+        var contact = db.Contacts.SingleOrDefault(c => c.Id == id);
+        return contact;
     }
 
-    internal static void GetContacts()
+    internal static List<Contact> GetContacts()
     {
-        throw new NotImplementedException();
+        using var db = new ContactContext();
+        var contacts = db.Contacts.ToList();
+        return contacts;
     }
 
-    internal static void UpdateContact()
+    internal static void UpdateContact(Contact contact)
     {
-        throw new NotImplementedException();
+        using var db = new ContactContext();
+        db.Update(contact);
+        db.SaveChanges();
     }
 }

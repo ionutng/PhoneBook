@@ -13,25 +13,25 @@ while (!endApp)
             MenuOptions.UpdateContact,
             MenuOptions.DeleteContact,
             MenuOptions.ViewContacts,
-            MenuOptions.ViewContactById,
+            MenuOptions.ViewContact,
             MenuOptions.Quit));
 
     switch (option)
     {
         case MenuOptions.AddContact:
-            ContactController.AddContact();
+            ContactService.InsertContact();
             break;
         case MenuOptions.UpdateContact:
-            ContactController.UpdateContact();
+            ContactService.UpdateContact();
             break;
         case MenuOptions.DeleteContact:
-            ContactController.DeleteContact();
+            ContactService.DeleteContact();
             break;
         case MenuOptions.ViewContacts:
-            ContactController.GetContacts();
+            ContactService.GetContacts();
             break;
-        case MenuOptions.ViewContactById:
-            ContactController.GetContactById();
+        case MenuOptions.ViewContact:
+            ContactService.GetContact();
             break;
         case MenuOptions.Quit:
             Environment.Exit(0);
@@ -45,6 +45,6 @@ enum MenuOptions {
     UpdateContact,
     DeleteContact,
     ViewContacts,
-    ViewContactById,
+    ViewContact,
     Quit
 }
