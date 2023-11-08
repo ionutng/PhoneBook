@@ -7,9 +7,19 @@ internal class ContactService
     static internal void InsertContact()
     {
         var contact = new Contact();
+
         contact.Name = AnsiConsole.Ask<string>("Contact's name:");
-        contact.Email = AnsiConsole.Ask<string>("Contact's email:");
-        contact.Phone = AnsiConsole.Ask<string>("Contact's phone:");
+
+        do
+        {
+            contact.Email = AnsiConsole.Ask<string>("Contact's email:");
+        } while (!Validation.IsValidEmail(contact.Email));
+
+        do
+        {
+            contact.Phone = AnsiConsole.Ask<string>("Contact's phone:");
+        } while (!Validation.IsValidPhone(contact.Phone));
+
         ContactController.AddContact(contact);
     }
 
@@ -39,13 +49,21 @@ internal class ContactService
             ? contact.Name = AnsiConsole.Ask<string>("Contact's new name:")
             : contact.Name;
 
-        contact.Email = AnsiConsole.Confirm("Update email?")
-            ? contact.Email = AnsiConsole.Ask<string>("Contact's new email:")
-            : contact.Email;
+        if (AnsiConsole.Confirm("Update email?"))
+        {
+            do
+            {
+                contact.Email = AnsiConsole.Ask<string>("Contact's new email:");
+            } while (!Validation.IsValidEmail(contact.Email));
+        }
 
-        contact.Phone = AnsiConsole.Confirm("Update phone?")
-            ? contact.Phone = AnsiConsole.Ask<string>("Contact's new phone:")
-            : contact.Phone;
+        if (AnsiConsole.Confirm("Update phone?"))
+        {
+            do
+            {
+                contact.Phone = AnsiConsole.Ask<string>("Contact's new phone:");
+            } while (!Validation.IsValidPhone(contact.Phone));
+        }
 
         ContactController.UpdateContact(contact);
     }

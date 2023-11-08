@@ -40,7 +40,8 @@ while (!endApp)
 }
 
 
-enum MenuOptions {
+enum MenuOptions
+{
     AddContact,
     UpdateContact,
     DeleteContact,

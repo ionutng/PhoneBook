@@ -1,7 +1,4 @@
-﻿using Spectre.Console;
-using System.Net.Http.Headers;
-
-namespace PhoneBook;
+﻿namespace PhoneBook;
 
 internal class ContactController
 {
