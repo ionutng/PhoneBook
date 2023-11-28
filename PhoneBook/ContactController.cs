@@ -1,4 +1,6 @@
-﻿namespace PhoneBook;
+﻿using PhoneBook.Models;
+
+namespace PhoneBook;
 
 internal class ContactController
 {
