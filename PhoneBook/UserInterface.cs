@@ -13,51 +13,105 @@ static internal class UserInterface
         {
             Console.Clear();
             var option = AnsiConsole.Prompt(
-                new SelectionPrompt<MenuOptions>()
+                new SelectionPrompt<MainMenuOptions>()
                 .Title("What would you like to do?")
                 .AddChoices(
-                    MenuOptions.AddContact,
-                    MenuOptions.UpdateContact,
-                    MenuOptions.DeleteContact,
-                    MenuOptions.ViewContacts,
-                    MenuOptions.ViewContact,
-                    MenuOptions.AddCategory,
-                    MenuOptions.ViewCategories,
-                    MenuOptions.DeleteCategory,
-                    MenuOptions.UpdateCategory,
-                    MenuOptions.Quit));
+                    MainMenuOptions.ManageContacts,
+                    MainMenuOptions.ManageCategories,
+                    MainMenuOptions.Quit));
 
             switch (option)
             {
-                case MenuOptions.AddContact:
+                case MainMenuOptions.ManageContacts:
+                    ContactsMenu();
+                    break;
+                case MainMenuOptions.ManageCategories:
+                    CategoriesMenu();
+                    break;
+                case MainMenuOptions.Quit:
+                    Environment.Exit(0);
+                    break;
+            }
+        }
+    }
+
+    static internal void ContactsMenu()
+    {
+        bool isContactsMenuRunning = true;
+        while (isContactsMenuRunning)
+        {
+            Console.Clear();
+            var option = AnsiConsole.Prompt(
+                new SelectionPrompt<ContactMenu>()
+                .Title("Contacts Menu")
+                .AddChoices(
+                    ContactMenu.AddContact,
+                    ContactMenu.UpdateContact,
+                    ContactMenu.DeleteContact,
+                    ContactMenu.ViewContacts,
+                    ContactMenu.ViewContact,
+                    ContactMenu.Back));
+
+            switch (option)
+            {
+                case ContactMenu.AddContact:
                     ContactService.InsertContact();
                     break;
-                case MenuOptions.UpdateContact:
+                case ContactMenu.UpdateContact:
                     ContactService.UpdateContact();
                     break;
-                case MenuOptions.DeleteContact:
+                case ContactMenu.DeleteContact:
                     ContactService.DeleteContact();
                     break;
-                case MenuOptions.ViewContacts:
+                case ContactMenu.ViewContacts:
                     ContactService.GetContacts();
                     break;
-                case MenuOptions.ViewContact:
+                case ContactMenu.ViewContact:
                     ContactService.GetContact();
                     break;
-                case MenuOptions.AddCategory:
+                case ContactMenu.Back:
+                    isContactsMenuRunning = false;
+                    break;
+            }
+        }
+    }
+
+    static internal void CategoriesMenu()
+    {
+        bool isCategoriesMenuRunning = true;
+        while (isCategoriesMenuRunning)
+        {
+            Console.Clear();
+            var option = AnsiConsole.Prompt(
+                new SelectionPrompt<CategoryMenu>()
+                .Title("Categories Menu")
+                .AddChoices(
+                    CategoryMenu.AddCategory,
+                    CategoryMenu.UpdateCategory,
+                    CategoryMenu.DeleteCategory,
+                    CategoryMenu.ViewCategories,
+                    CategoryMenu.ViewCategory,
+                    CategoryMenu.Back));
+
+            switch (option)
+            {
+                case CategoryMenu.AddCategory:
                     CategoryService.InsertCategory();
                     break;
-                case MenuOptions.UpdateCategory: 
+                case CategoryMenu.UpdateCategory:
                     CategoryService.UpdateCategory();
                     break;
-                case MenuOptions.DeleteCategory:
+                case CategoryMenu.DeleteCategory:
                     CategoryService.DeleteCategory();
                     break;
-                case MenuOptions.ViewCategories:
+                case CategoryMenu.ViewCategories:
                     CategoryService.GetCategories();
                     break;
-                case MenuOptions.Quit:
-                    Environment.Exit(0);
+                case CategoryMenu.ViewCategory:
+                    CategoryService.GetCategory();
+                    break;
+                case CategoryMenu.Back:
+                    isCategoriesMenuRunning = false;
                     break;
             }
         }
@@ -112,6 +166,26 @@ static internal class UserInterface
             table.AddRow(category.CategoryId.ToString(), category.Name);
 
         AnsiConsole.Write(table);
+
+        Console.WriteLine("Press any key to go back to the Main Menu.");
+        Console.ReadKey();
+        Console.Clear();
+    }
+
+    internal static void ShowCategory(Category category)
+    {
+        var panel = new Panel(
+            $"Id: {category.CategoryId} " +
+            $"\nName: {category.Name} " +
+            $"\nContact Count: {category.Contacts.Count}")
+        {
+            Header = new PanelHeader("Category Info"),
+            Padding = new Padding(2, 2, 2, 2)
+        };
+
+        AnsiConsole.Write(panel);
+
+        ShowContactTable(category.Contacts);
 
         Console.WriteLine("Press any key to go back to the Main Menu.");
         Console.ReadKey();

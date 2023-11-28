@@ -1,4 +1,5 @@
-﻿using PhoneBook.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PhoneBook.Models;
 
 namespace PhoneBook.Controllers;
 
@@ -28,7 +29,7 @@ internal class CategoryController
     static internal List<Category> GetCategories()
     {
         using var db = new ContactContext();
-        var categories = db.Categories.ToList();
+        var categories = db.Categories.Include(c => c.Contacts).ToList();
         return categories;
     }
 }
