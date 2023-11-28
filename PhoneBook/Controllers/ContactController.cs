@@ -1,6 +1,7 @@
-﻿using PhoneBook.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PhoneBook.Models;
 
-namespace PhoneBook;
+namespace PhoneBook.Controllers;
 
 internal class ContactController
 {
@@ -11,6 +12,13 @@ internal class ContactController
         db.SaveChanges();
     }
 
+    internal static void UpdateContact(Contact contact)
+    {
+        using var db = new ContactContext();
+        db.Update(contact);
+        db.SaveChanges();
+    }
+
     internal static void DeleteContact(Contact contact)
     {
         using var db = new ContactContext();
@@ -18,24 +26,17 @@ internal class ContactController
         db.SaveChanges();
     }
 
-    internal static Contact GetContactById(int id)
-    {
-        using var db = new ContactContext();
-        var contact = db.Contacts.SingleOrDefault(c => c.Id == id);
-        return contact;
-    }
-
     internal static List<Contact> GetContacts()
     {
         using var db = new ContactContext();
-        var contacts = db.Contacts.ToList();
+        var contacts = db.Contacts.Include(c => c.Category).ToList();
         return contacts;
     }
 
-    internal static void UpdateContact(Contact contact)
+    internal static Contact GetContactById(int id)
     {
         using var db = new ContactContext();
-        db.Update(contact);
-        db.SaveChanges();
+        var contact = db.Contacts.Include(c => c.Category).SingleOrDefault(c => c.Id == id);
+        return contact;
     }
 }

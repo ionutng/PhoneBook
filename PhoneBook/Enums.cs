@@ -9,6 +9,10 @@ internal class Enums
         DeleteContact,
         ViewContacts,
         ViewContact,
+        AddCategory,
+        UpdateCategory,
+        DeleteCategory,
+        ViewCategories,
         Quit
     }
 }

@@ -1,7 +1,9 @@
-﻿using PhoneBook.Models;
+﻿using PhoneBook.Controllers;
+using PhoneBook.Models;
 using Spectre.Console;
+using System.Net.Http.Headers;
 
-namespace PhoneBook;
+namespace PhoneBook.Services;
 
 internal class ContactService
 {
@@ -21,25 +23,9 @@ internal class ContactService
             contact.Phone = AnsiConsole.Ask<string>("Contact's phone:");
         } while (!Validation.IsValidPhone(contact.Phone));
 
+        contact.CategoryId = CategoryService.GetCategoryOptionInput().CategoryId;
+
         ContactController.AddContact(contact);
-    }
-
-    static internal void DeleteContact()
-    {
-        var contact = GetContactOptionInput();
-        ContactController.DeleteContact(contact);
-    }
-
-    static internal void GetContacts()
-    {
-        var contacts = ContactController.GetContacts();
-        UserInterface.ShowContactTable(contacts);
-    }
-
-    static internal void GetContact()
-    {
-        var contact = GetContactOptionInput();
-        UserInterface.ShowContact(contact);
     }
 
     static internal void UpdateContact()
@@ -66,7 +52,29 @@ internal class ContactService
             } while (!Validation.IsValidPhone(contact.Phone));
         }
 
+        contact.Category = AnsiConsole.Confirm("Update category?")
+            ? CategoryService.GetCategoryOptionInput()
+            : contact.Category;
+
         ContactController.UpdateContact(contact);
+    }
+
+    static internal void DeleteContact()
+    {
+        var contact = GetContactOptionInput();
+        ContactController.DeleteContact(contact);
+    }
+
+    static internal void GetContacts()
+    {
+        var contacts = ContactController.GetContacts();
+        UserInterface.ShowContactTable(contacts);
+    }
+
+    static internal void GetContact()
+    {
+        var contact = GetContactOptionInput();
+        UserInterface.ShowContact(contact);
     }
 
     static private Contact GetContactOptionInput()
